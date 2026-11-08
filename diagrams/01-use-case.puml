@@ -1,0 +1,40 @@
+@startuml
+' Вариант 18. Исходник; PNG отрисован Pillow (tools/diagrams.py), т.к. PlantUML не установлен
+left to right direction
+actor "Аналитик ДКК" as An
+actor "Аудитор" as Au
+actor "Оператор call-центра" as Op
+actor "ИС «Мониторинг реализации основных бизнес-процессов»" as Mon
+actor "ИС «Голосовой помощник банка N»" as VA
+actor "Клиент банка" as Cl
+rectangle "ИАС «Качество обработки обращений в call-центр»" {
+ usecase "Сегментировать обращения (группы + «иное»)" as UC1
+ usecase "Вести сценарии (≥5 параметров)" as UC2
+ usecase "Согласовать публикацию сценария [предложение автора]" as UC3
+ usecase "Получить данные звонка с оператором" as UC4
+ usecase "Отнести звонок к сценарию или «иное»" as UC5
+ usecase "Выявить смену темы / несколько вопросов" as UC6
+ usecase "Рассчитать параметры P01–P06" as UC7
+ usecase "Предложить оценку и объяснение (ИИ-агент)" as UC8
+ usecase "Оценить соответствие сценарию" as UC9
+ usecase "Просматривать отчёты и KPI" as UC10
+ usecase "Просматривать свои утверждённые оценки" as UC11
+ usecase "Учесть ответ «вопрос решён/не решён»" as UC12
+}
+An -- UC1
+An -- UC2
+An -- UC10
+Au -- UC3
+Au -- UC9
+Au -- UC10
+Op -- UC11
+UC4 -- Mon
+UC4 -- VA
+UC5 -- VA
+UC12 -- VA
+UC12 -- Cl
+UC6 .> UC5 : <<extend>>
+UC6 ..> UC7 : <<include>>
+UC9 ..> UC8 : <<include>>
+note bottom : Диалоги только с голосовым помощником не оцениваются
+@enduml
